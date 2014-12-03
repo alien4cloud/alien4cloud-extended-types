@@ -1,0 +1,45 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+
+template_name: alien-extended-storage-types
+template_author: alien4cloud
+template_version: 1.0-SNAPSHOT
+
+imports:
+  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
+
+description: This archive contains custom blockstorages types.
+
+node_types:
+  alien.nodes.DeletableBlockStorage:
+    derived_from: tosca.nodes.BlockStorage
+    description: A storage to destroy at the end of the deployment.
+    tags:
+      icon: /images/deletableVolume.png
+
+  alien.nodes.ConfigurableBlockStorage:
+    derived_from: tosca.nodes.BlockStorage
+    description: A block storage node that allow configuration of the device path and file system.
+    properties:
+      device:
+        type: string
+        description: The device name on which to attach the requested storage.
+      path:
+        type: string
+        description: The path where will be mounted the requested storage.
+      file_system:
+        type: string
+        description: The file system of the requested storage.
+
+  alien.nodes.DeletableConfigurableBlockStorage:
+    derived_from: alien.nodes.DeletableBlockStorage
+    description: A block storage node that allow configuration of the device path and file system. This block storage will be destroyed at the end of the deployment.
+    properties:
+      device:
+        type: string
+        description: The device name on which to attach the requested storage.
+      path:
+        type: string
+        description: The path where will be mounted the requested storage.
+      file_system:
+        type: string
+        description: The file system of the requested storage.
