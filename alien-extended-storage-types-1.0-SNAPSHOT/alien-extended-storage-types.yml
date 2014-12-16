@@ -23,9 +23,9 @@ node_types:
       device:
         type: string
         description: The device name on which to attach the requested storage.
-      path:
+      location:
         type: string
-        description: The path where will be mounted the requested storage.
+        description: The path on the file system where will be mounted the requested storage.
       file_system:
         type: string
         description: The file system of the requested storage.
@@ -37,9 +37,9 @@ node_types:
       device:
         type: string
         description: The device name on which to attach the requested storage.
-      path:
+      location:
         type: string
-        description: The path where will be mounted the requested storage.
+        description: The path on the file system where will be mounted the requested storage.
       file_system:
         type: string
         description: The file system of the requested storage.
