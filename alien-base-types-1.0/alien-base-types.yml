@@ -19,5 +19,5 @@ artifact_types:
     file_ext: [ war ]
 
 capability_types:
-  alien4cloud.capabilities.HttpEndpoint:
+  alien.capabilities.HttpEndpoint:
     derived_from: tosca.capabilities.Endpoint
