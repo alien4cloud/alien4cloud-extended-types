@@ -17,6 +17,9 @@ artifact_types:
   alien.artifacts.WarFile:
     description: A war file (Web Archive).
     file_ext: [ war ]
+  alien.artifacts.BatchScript:
+    description: A Windows batch script (.bat or .cmd)
+    file_ext: [ bat, cmd]
 
 capability_types:
   alien.capabilities.HttpEndpoint:
