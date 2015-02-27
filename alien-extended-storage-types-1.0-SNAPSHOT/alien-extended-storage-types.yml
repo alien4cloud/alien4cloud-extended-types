@@ -23,12 +23,15 @@ node_types:
       device:
         type: string
         description: The device name on which to attach the requested storage.
+        required: false
       location:
         type: string
         description: The path on the file system where will be mounted the requested storage.
+        required: false
       file_system:
         type: string
         description: The file system of the requested storage.
+        required: false
 
   alien.nodes.DeletableConfigurableBlockStorage:
     derived_from: alien.nodes.DeletableBlockStorage
@@ -37,9 +40,12 @@ node_types:
       device:
         type: string
         description: The device name on which to attach the requested storage.
+        required: false
       location:
         type: string
         description: The path on the file system where will be mounted the requested storage.
+        required: false
       file_system:
         type: string
         description: The file system of the requested storage.
+        required: false
