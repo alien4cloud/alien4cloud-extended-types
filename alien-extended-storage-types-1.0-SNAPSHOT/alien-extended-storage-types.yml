@@ -13,12 +13,20 @@ node_types:
   alien.nodes.DeletableBlockStorage:
     derived_from: tosca.nodes.BlockStorage
     description: A storage to destroy at the end of the deployment.
+    capabilities:
+      volume:
+        type: alien.capabilities.Volume
+        upper_bound: unbounded
     tags:
       icon: /images/deletableVolume.png
 
   alien.nodes.ConfigurableBlockStorage:
     derived_from: tosca.nodes.BlockStorage
     description: A block storage node that allow configuration of the device path and file system.
+    capabilities:
+      volume:
+        type: alien.capabilities.Volume
+        upper_bound: unbounded
     properties:
       device:
         type: string
@@ -36,6 +44,10 @@ node_types:
   alien.nodes.DeletableConfigurableBlockStorage:
     derived_from: alien.nodes.DeletableBlockStorage
     description: A block storage node that allow configuration of the device path and file system. This block storage will be destroyed at the end of the deployment.
+    capabilities:
+      volume:
+        type: alien.capabilities.Volume
+        upper_bound: unbounded
     properties:
       device:
         type: string
@@ -49,3 +61,8 @@ node_types:
         type: string
         description: The file system of the requested storage.
         required: false
+
+capability_types:
+  alien.capabilities.Volume:
+    derived_from: tosca.capabilities.Container
+    description: This capability is used to connect the BlockStorage with a Software. It allows the software to know which storage to use to save data.
