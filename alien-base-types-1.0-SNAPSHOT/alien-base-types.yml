@@ -10,6 +10,44 @@ imports:
 
 description: Some types by alien4cloud.
 
+node_types:
+
+  alien.nodes.LoadBalancer:
+    abstract: true
+    derived_from: tosca.nodes.SoftwareComponent
+    description: >
+      The base type for a load balancer.
+    tags:
+      icon: /images/loadbalancer.png
+    properties:
+      port:
+        type: integer
+        description: Port for the LoadBalancer
+        default: 80
+        constraints:
+          - greater_or_equal: 1
+    capabilities:
+      load_balancer:
+        type: alien.capabilities.LoadBalancer
+        properties:
+          valid_node_types: [ alien.nodes.LoadBalancedWebApplication ]
+
+  alien.nodes.LoadBalancedWebApplication:
+    abstract: true
+    derived_from: tosca.nodes.Root
+    description: >
+      An web application that can be load balanced
+    tags:
+      icon: /images/network.png
+    attributes:
+      application_url:
+        type: string
+        description: URL of the web application
+    requirements:
+      - load_balancer: alien.capabilities.LoadBalancer
+        lower_bound: 0
+        upper_bound: unbounded
+
 artifact_types:
   tosca.artifacts.GroovyScript:
     description: A groovy script (.groovy file)
@@ -22,5 +60,17 @@ artifact_types:
     file_ext: [ bat, cmd]
 
 capability_types:
+
   alien.capabilities.HttpEndpoint:
     derived_from: tosca.capabilities.Endpoint
+
+  alien.capabilities.LoadBalancer:
+    derived_from: tosca.capabilities.Root
+
+relationship_types:
+  alien.relationships.WebApplicationConnectsToLoadBalancer:
+    abstract: true
+    derived_from: tosca.relationships.ConnectsTo
+    description: Relationship use to connect the WebServer to the LoadBalancer
+    valid_sources: [ alien.nodes.LoadBalancedWebApplication ]
+    valid_targets: [ alien.capabilities.LoadBalancer ]
