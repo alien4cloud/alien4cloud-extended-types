@@ -40,9 +40,9 @@ node_types:
     tags:
       icon: /images/network.png
     attributes:
-      application_url:
+      local_application_url:
         type: string
-        description: URL of the web application
+        description: URL of the web application using private IP, used to register to the load balancer
     requirements:
       - load_balancer: alien.capabilities.LoadBalancer
         lower_bound: 0
