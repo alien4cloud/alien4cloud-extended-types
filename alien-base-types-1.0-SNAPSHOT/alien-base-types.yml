@@ -6,7 +6,7 @@ template_version: 1.0-SNAPSHOT
 
 #dependencies
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
 
 description: Some types by alien4cloud.
 
