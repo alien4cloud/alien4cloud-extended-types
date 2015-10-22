@@ -80,7 +80,7 @@ relationship_types:
         pre_configure_source:
           inputs:
             PARTITION_TYPE: { get_property: [SELF, partition_type] }
-            DEVICE: { get_property: [TARGET, device] }
+            DEVICE: { get_attribute: [TARGET, device] }
           implementation: scripts/fdisk.sh
           outputs:
             PARTITION_NAME: { set_attribute: [SOURCE, partition_name]}
