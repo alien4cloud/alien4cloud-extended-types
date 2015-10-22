@@ -41,7 +41,7 @@ node_types:
           The relationship implementation is responsible for filling that up.
     requirements:
       - host: tosca.capabilities.Container
-        relationship_type: alien.relationships.LinuxMount
+        relationship_type: tosca.relationships.HostedOn
         lower_bound: 1
         upper_bound: 1
         node_filter: # Ensure that the host node has a os capability with linux operating system.
@@ -61,6 +61,12 @@ node_types:
             LOCATION: { get_property: [SELF, location] }
             FS_NAME: { get_attribute: [SELF, fs_name] }
           implementation: scripts/mkfs.sh
+        start: # Map the mount operation in the start
+          inputs:
+            FS_MOUNT_PATH: { get_property: [SOURCE, location] }
+            FS_NAME: { get_attribute: [SOURCE, fs_name]}
+          implementation: scripts/mount.sh
+        stop: scripts/unmount.sh
 
 relationship_types:
   alien.relationships.LinuxPartition:
@@ -69,24 +75,24 @@ relationship_types:
     # valid_target_types: [ alien.nodes.LinuxFileSystem ]
     interfaces:
       Configure:
-        pre_configure_target:
+        pre_configure_source:
           inputs:
-            DEVICE: { get_property: [SOURCE, device] }
+            DEVICE: { get_property: [TARGET, device] }
           implementation: scripts/fdisk.sh
           outputs:
-            FS_NAME: { set_attribute: [TARGET, fs_name]}
-  alien.relationships.LinuxMount:
-    derived_from: tosca.relationships.HostedOn
-    description: Mount a FileSystem on a compute.
-    interfaces:
-      Configure:
-        add_source: # this has to be done once the file-system (source) is configured
-          inputs:
-            FS_MOUNT_PATH: { get_property: [SOURCE, location] }
-            FS_NAME: { get_attribute: [SOURCE, fs_name]}
-          implementation: scripts/mount.sh
-        remove_source:
-          implementation: scripts/unmount.sh
+            FS_NAME: { set_attribute: [SOURCE, fs_name]}
+#  alien.relationships.LinuxMount:
+#    derived_from: tosca.relationships.HostedOn
+#    description: Mount a FileSystem on a compute.
+#    interfaces:
+#      Configure:
+#        add_source: # this has to be done once the file-system (source) is configured
+#          inputs:
+#            FS_MOUNT_PATH: { get_property: [SOURCE, location] }
+#            FS_NAME: { get_attribute: [SOURCE, fs_name]}
+#          implementation: scripts/mount.sh
+#        remove_source:
+#          implementation: scripts/unmount.sh
 
 capability_types:
   alien.capabilities.Volume:
