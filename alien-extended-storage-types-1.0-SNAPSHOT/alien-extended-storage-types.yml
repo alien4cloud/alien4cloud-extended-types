@@ -30,11 +30,7 @@ node_types:
         constraints:
           - min_length: 1
     attributes:
-      partition_name:
-        type: string
-        description: >
-          The name of the file system (after the partition has been created by the Partition realtionship).
-          The relationship implementation is responsible for filling that up.
+      partition_name: { get_operation_output: [ SELF, Configure, pre_configure_source, PARTITION_NAME ] } # this is a hack to specifies that the attribute is filled from a relationship.
     requirements:
       - host: tosca.capabilities.Container
         relationship_type: tosca.relationships.HostedOn
