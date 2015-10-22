@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-fs_mount_path=$(ctx source node properties fs_mount_path)
+fs_mount_path=${FS_MOUNT_PATH}
 
 ctx logger info "Unmounting file system on ${fs_mount_path}"
 sudo umount -l ${fs_mount_path}

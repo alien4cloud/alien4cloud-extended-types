@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-fs_mount_path=$(ctx source node properties fs_mount_path)
-filesys=$(ctx source instance runtime-properties filesys)
+fs_mount_path=${FS_MOUNT_PATH}
+filesys=${PARTITION_NAME}
 
 if [ ! -f ${fs_mount_path} ]; then
     sudo mkdir -p ${fs_mount_path}

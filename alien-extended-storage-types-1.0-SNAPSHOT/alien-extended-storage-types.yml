@@ -54,14 +54,17 @@ node_types:
         configure:
           inputs:
             FS_TYPE: { get_property: [SELF, fs_type] }
-            FS_NAME: { get_attribute: [SELF, fs_name] }
+            PARTITION_NAME: { get_attribute: [SELF, partition_name] }
           implementation: scripts/mkfs.sh
         start: # Map the mount operation in the start
           inputs:
             FS_MOUNT_PATH: { get_property: [SELF, location] }
-            FS_NAME: { get_attribute: [SELF, fs_name]}
+            PARTITION_NAME: { get_attribute: [SELF, partition_name]}
           implementation: scripts/mount.sh
-        stop: scripts/unmount.sh
+        stop:
+          inputs:
+            FS_MOUNT_PATH: { get_property: [SELF, location] }
+          implementation: scripts/unmount.sh
 
 relationship_types:
   alien.relationships.LinuxPartition:
@@ -74,7 +77,7 @@ relationship_types:
         type: integer
         default: 83
     attributes:
-      fs_name: { get_operation_output: [ SELF, Configure, pre_configure_source, FS_NAME ] }
+      partition_name: { get_operation_output: [ SELF, Configure, pre_configure_source, PARTITION_NAME ] }
     interfaces:
       Configure:
         pre_configure_source:

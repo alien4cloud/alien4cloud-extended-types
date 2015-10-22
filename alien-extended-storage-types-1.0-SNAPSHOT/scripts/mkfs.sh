@@ -2,7 +2,7 @@
 
 # use_external_resource=$(ctx node properties use_external_resource)
 fs_type=${FS_TYPE}
-filesys=${FS_NAME}
+filesys=${PARTITION_NAME}
 
 (eval $(blkid $DEV | awk ' { print $3 } '); echo $TYPE)
 
