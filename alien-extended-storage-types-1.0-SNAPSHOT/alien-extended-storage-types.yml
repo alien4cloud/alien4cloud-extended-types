@@ -14,10 +14,6 @@ node_types:
     derived_from: tosca.nodes.SoftwareComponent
     description: FileSystem node can be used to mount and format a volume.
     properties:
-      partition_type:
-        description: The partition type. 83 is a Linux Native Partition.
-        type: integer
-        default: 83
       fs_type:
         description: The type of the File System.
         type: string
@@ -34,7 +30,7 @@ node_types:
         constraints:
           - min_length: 1
     attributes:
-      fs_name:
+      partition_name:
         type: string
         description: >
           The name of the file system (after the partition has been created by the Partition realtionship).
@@ -58,7 +54,6 @@ node_types:
         configure:
           inputs:
             FS_TYPE: { get_property: [SELF, fs_type] }
-            LOCATION: { get_property: [SELF, location] }
             FS_NAME: { get_attribute: [SELF, fs_name] }
           implementation: scripts/mkfs.sh
         start: # Map the mount operation in the start
@@ -73,14 +68,22 @@ relationship_types:
     derived_from: tosca.relationships.DependsOn
     description: Connets a FileSystem to a Volume.
     # valid_target_types: [ alien.nodes.LinuxFileSystem ]
+    properties:
+      partition_type:
+        description: The partition type. 83 is a Linux Native Partition.
+        type: integer
+        default: 83
+    attributes:
+      fs_name: { get_operation_output: [ SELF, Configure, pre_configure_source, FS_NAME ] }
     interfaces:
       Configure:
         pre_configure_source:
           inputs:
+            PARTITION_TYPE: { get_property: [SELF, partition_type] }
             DEVICE: { get_property: [TARGET, device] }
           implementation: scripts/fdisk.sh
           outputs:
-            FS_NAME: { set_attribute: [SOURCE, fs_name]}
+            PARTITION_NAME: { set_attribute: [SOURCE, partition_name]}
 #  alien.relationships.LinuxMount:
 #    derived_from: tosca.relationships.HostedOn
 #    description: Mount a FileSystem on a compute.
