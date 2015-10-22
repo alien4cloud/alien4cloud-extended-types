@@ -63,8 +63,8 @@ node_types:
           implementation: scripts/mkfs.sh
         start: # Map the mount operation in the start
           inputs:
-            FS_MOUNT_PATH: { get_property: [SOURCE, location] }
-            FS_NAME: { get_attribute: [SOURCE, fs_name]}
+            FS_MOUNT_PATH: { get_property: [SELF, location] }
+            FS_NAME: { get_attribute: [SELF, fs_name]}
           implementation: scripts/mount.sh
         stop: scripts/unmount.sh
 
