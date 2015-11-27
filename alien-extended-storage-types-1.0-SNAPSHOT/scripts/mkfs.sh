@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# use_external_resource=$(ctx node properties use_external_resource)
+use_external_resource=$(ctx node properties use_external_resource)
 fs_type=${FS_TYPE}
 filesys=${PARTITION_NAME}
 

@@ -79,6 +79,7 @@ relationship_types:
         pre_configure_source:
           inputs:
             PARTITION_TYPE: { get_property: [SELF, partition_type] }
+            VOLUME_ID: { get_property: [TARGET, volume_id] }
             DEVICE: { get_attribute: [TARGET, device] }
           implementation: scripts/fdisk.sh
           outputs:

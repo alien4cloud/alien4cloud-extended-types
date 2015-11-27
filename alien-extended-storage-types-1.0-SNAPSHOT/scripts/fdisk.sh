@@ -1,15 +1,15 @@
 #!/bin/bash -e
 
-# use_external_resource=$(ctx source node properties use_external_resource)
 partition_number=1
+volume_id=${VOLUME_ID}
 partition_type=${PARTITION_TYPE}
 device_name=${DEVICE}
 
-if [ -z "${use_external_resource}" ]; then
+if [ -z "${volume_id}" ]; then
     echo "Creating disk partition on device ${device_name}"
     (echo n; echo p; echo ${partition_number}; echo ; echo ; echo t; echo ${partition_type}; echo w) | sudo fdisk ${device_name}
 else
-    echo "Not partitioning device since 'use_external_resource' is set to true"
+    echo "Not partitioning device since 'volume_id' is not empty"
 fi
 
 # Set this runtime property on the source (the filesystem)
