@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
-use_external_resource=$(ctx node properties use_external_resource)
+volume_id=${VOLUME_ID}
 fs_type=${FS_TYPE}
 filesys=${PARTITION_NAME}
 
 (eval $(blkid $DEV | awk ' { print $3 } '); echo $TYPE)
 
-if [ -z "${use_external_resource}" ]; then
+if [ -z "${volume_id}" ]; then
     mkfs_executable=''
     case ${fs_type} in
         ext2 | ext3 | ext4 | fat | ntfs )
@@ -21,5 +21,5 @@ if [ -z "${use_external_resource}" ]; then
     echo "Creating ${fs_type} file system using ${mkfs_executable}"
     sudo ${mkfs_executable} ${filesys}
 else
-    echo "Not making a filesystem since 'use_external_resource' is set to true"
+    echo "Not making a filesystem since 'volume_id' not empty"
 fi

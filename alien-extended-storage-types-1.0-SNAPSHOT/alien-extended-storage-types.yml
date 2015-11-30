@@ -47,11 +47,6 @@ node_types:
         upper_bound: 1
     interfaces:
       Standard:
-        configure:
-          inputs:
-            FS_TYPE: { get_property: [SELF, fs_type] }
-            PARTITION_NAME: { get_attribute: [SELF, partition_name] }
-          implementation: scripts/mkfs.sh
         start: # Map the mount operation in the start
           inputs:
             FS_MOUNT_PATH: { get_property: [SELF, location] }
@@ -84,6 +79,12 @@ relationship_types:
           implementation: scripts/fdisk.sh
           outputs:
             PARTITION_NAME: { set_attribute: [SOURCE, partition_name]}
+        post_configure_source:
+          inputs:
+            FS_TYPE: { get_property: [SOURCE, fs_type] }
+            PARTITION_NAME: { get_attribute: [SOURCE, partition_name ] }
+            VOLUME_ID: { get_property: [TARGET, volume_id] }
+          implementation: scripts/mkfs.sh
 #  alien.relationships.LinuxMount:
 #    derived_from: tosca.relationships.HostedOn
 #    description: Mount a FileSystem on a compute.
