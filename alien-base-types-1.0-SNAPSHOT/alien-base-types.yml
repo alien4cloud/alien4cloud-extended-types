@@ -29,8 +29,6 @@ node_types:
     capabilities:
       load_balancer:
         type: alien.capabilities.LoadBalancer
-        properties:
-          valid_node_types: [ alien.nodes.LoadBalancedWebApplication ]
 
   alien.nodes.LoadBalancedWebApplication:
     abstract: true
