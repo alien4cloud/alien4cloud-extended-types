@@ -1,11 +1,11 @@
-tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+tosca_definitions_version: alien_dsl_1_2_0
 
 template_name: alien-extended-storage-types
 template_author: alien4cloud
-template_version: 1.2.0-SNAPSHOT
+template_version: 1.2.0
 
 imports:
-  - tosca-normative-types:1.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN12
 
 description: This archive contains custom blockstorages types.
 
