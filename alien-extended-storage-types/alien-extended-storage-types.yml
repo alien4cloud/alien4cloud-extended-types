@@ -33,18 +33,16 @@ node_types:
       partition_name: { get_operation_output: [ SELF, Configure, pre_configure_source, PARTITION_NAME ] } # this is a hack to specifies that the attribute is filled from a relationship.
     requirements:
       - host: tosca.capabilities.Container
-        relationship_type: tosca.relationships.HostedOn
-        lower_bound: 1
-        upper_bound: 1
+        relationship: tosca.relationships.HostedOn
+        occurrences: [ 1, 1]
         node_filter: # Ensure that the host node has a os capability with linux operating system.
           capabilities:
             - tosca.capabilities.OperatingSystem: # os -> tosca.capabilities.OperatingSystem
                 properties:
                   - type: { equal: linux }
       - partition: tosca.nodes.BlockStorage
-        relationship_type: alien.relationships.LinuxPartition
-        lower_bound: 1
-        upper_bound: 1
+        relationship: alien.relationships.LinuxPartition
+        occurrences: [ 1, 1]
     interfaces:
       Standard:
         start: # Map the mount operation in the start

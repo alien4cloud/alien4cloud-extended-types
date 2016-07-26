@@ -44,8 +44,7 @@ node_types:
         description: URL of the web application using private IP, used to register to the load balancer
     requirements:
       - load_balancer: alien.capabilities.LoadBalancer
-        lower_bound: 0
-        upper_bound: unbounded
+        occurrences: [ 0, unbounded ]
 
 artifact_types:
   tosca.artifacts.GroovyScript:
@@ -71,5 +70,4 @@ relationship_types:
     abstract: true
     derived_from: tosca.relationships.ConnectsTo
     description: Relationship use to connect the WebServer to the LoadBalancer
-    valid_sources: [ alien.nodes.LoadBalancedWebApplication ]
-    valid_targets: [ alien.capabilities.LoadBalancer ]
+    valid_target_types: [ alien.capabilities.LoadBalancer ]
