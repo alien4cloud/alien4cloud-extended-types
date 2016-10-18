@@ -4,8 +4,6 @@ volume_id=${VOLUME_ID}
 fs_type=${FS_TYPE}
 filesys=${PARTITION_NAME}
 
-(eval $(blkid $DEV | awk ' { print $3 } '); echo $TYPE)
-
 if [ -z "${volume_id}" ]; then
     mkfs_executable=''
     case ${fs_type} in
