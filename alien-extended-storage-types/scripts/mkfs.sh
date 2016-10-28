@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
-volume_id=${VOLUME_ID}
 fs_type=${FS_TYPE}
 filesys=${PARTITION_NAME}
 
-if [ -z "${volume_id}" ]; then
+EXISTING_FS_TYPE=$(sudo lsblk -no FSTYPE $PARTITION_NAME)
+if [ -z $EXISTING_FS_TYPE ] ; then
     mkfs_executable=''
     case ${fs_type} in
         ext2 | ext3 | ext4 | fat | ntfs )
@@ -19,5 +19,9 @@ if [ -z "${volume_id}" ]; then
     echo "Creating ${fs_type} file system using ${mkfs_executable}"
     sudo ${mkfs_executable} ${filesys}
 else
-    echo "Not making a filesystem since 'volume_id' not empty"
+    if [ "$EXISTING_FS_TYPE" != "$fs_type" ] ; then
+        echo "Existing filesystem ($EXISTING_FS_TYPE) but not the expected type ($fs_type)"
+        exit 1
+    fi
+    echo "Not making a filesystem since a it already exist"
 fi

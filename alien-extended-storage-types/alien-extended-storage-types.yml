@@ -72,14 +72,12 @@ relationship_types:
         pre_configure_source:
           inputs:
             PARTITION_TYPE: { get_property: [SELF, partition_type] }
-            VOLUME_ID: { get_property: [TARGET, volume_id] }
             DEVICE: { get_attribute: [TARGET, device] }
           implementation: scripts/fdisk.sh
         post_configure_source:
           inputs:
             FS_TYPE: { get_property: [SOURCE, fs_type] }
             PARTITION_NAME: { get_attribute: [SOURCE, partition_name ] }
-            VOLUME_ID: { get_property: [TARGET, volume_id] }
           implementation: scripts/mkfs.sh
 #  alien.relationships.LinuxMount:
 #    derived_from: tosca.relationships.HostedOn
