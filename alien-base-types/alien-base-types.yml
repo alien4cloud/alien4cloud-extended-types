@@ -2,17 +2,16 @@ tosca_definitions_version: alien_dsl_1_2_0
 
 template_name: alien-base-types
 template_author: alien4cloud
-template_version: 1.2.0-SNAPSHOT
+template_version: 1.3.0
 
 #dependencies
 imports:
-  - tosca-normative-types:1.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN12
 
 description: >
   Some types by alien4cloud.
 
 node_types:
-
   alien.nodes.LoadBalancer:
     abstract: true
     derived_from: tosca.nodes.SoftwareComponent
@@ -30,7 +29,6 @@ node_types:
     capabilities:
       load_balancer:
         type: alien.capabilities.LoadBalancer
-
   alien.nodes.LoadBalancedWebApplication:
     abstract: true
     derived_from: tosca.nodes.Root
@@ -58,10 +56,8 @@ artifact_types:
     file_ext: [ bat, cmd]
 
 capability_types:
-
   alien.capabilities.HttpEndpoint:
     derived_from: tosca.capabilities.Endpoint
-
   alien.capabilities.LoadBalancer:
     derived_from: tosca.capabilities.Root
 
