@@ -56,6 +56,11 @@ artifact_types:
   alien.artifacts.BatchScript:
     description: A Windows batch script (.bat or .cmd)
     file_ext: [ bat, cmd]
+  alien.artifacts.AnsiblePlaybook:
+    derived_from: tosca.artifacts.Root
+    mime_type: application/zip
+    file_ext: [ ansible ]
+
 
 capability_types:
 
