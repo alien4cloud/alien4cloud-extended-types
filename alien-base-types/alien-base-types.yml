@@ -47,13 +47,12 @@ node_types:
         occurrences: [ 0, unbounded ]
 
 artifact_types:
-  tosca.artifacts.GroovyScript:
-    description: A groovy script (.groovy file)
-    file_ext: [ groovy ]
   alien.artifacts.WarFile:
+    derived_from: tosca.artifacts.Root
     description: A war file (Web Archive).
     file_ext: [ war ]
   alien.artifacts.BatchScript:
+    derived_from: tosca.artifacts.Root
     description: A Windows batch script (.bat or .cmd)
     file_ext: [ bat, cmd]
   alien.artifacts.AnsiblePlaybook:
