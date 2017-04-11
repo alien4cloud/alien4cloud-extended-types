@@ -1,4 +1,4 @@
-tosca_definitions_version: alien_dsl_1_3_0
+tosca_definitions_version: alien_dsl_1_4_0
 
 metadata:
   template_name: alien-base-types
@@ -7,7 +7,7 @@ metadata:
 
 #dependencies
 imports:
-  - tosca-normative-types:1.0.0-ALIEN12
+  - tosca-normative-types:1.0.0-ALIEN14
 
 description: Types supported by alien 4 cloud that extends the TOSCA specification.
 
