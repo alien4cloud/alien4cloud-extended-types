@@ -12,10 +12,6 @@ imports:
 description: Types supported by alien 4 cloud that extends the TOSCA specification.
 
 artifact_types:
-  org.alien4cloud.artifacts.WarFile:
-    derived_from: tosca.artifacts.Root
-    description: A war file (Web Archive).
-    file_ext: [ war ]
   org.alien4cloud.artifacts.BatchScript:
     derived_from: tosca.artifacts.Root
     description: A Windows batch script (.bat or .cmd)
