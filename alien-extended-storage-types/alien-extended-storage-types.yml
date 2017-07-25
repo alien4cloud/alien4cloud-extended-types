@@ -32,7 +32,7 @@ node_types:
     attributes:
       partition_name: { get_operation_output: [ SELF, Configure, pre_configure_source, PARTITION_NAME ] } # this is a hack to specifies that the attribute is filled from a relationship.
     requirements:
-      - host: 
+      - host:
           capability: tosca.capabilities.Container
           relationship: tosca.relationships.HostedOn
           occurrences: [ 1, 1]
@@ -41,8 +41,9 @@ node_types:
               - tosca.capabilities.OperatingSystem: # os -> tosca.capabilities.OperatingSystem
                   properties:
                     - type: { equal: linux }
-      - partition: 
-          capability: tosca.capabilities.Attachment
+      - partition:
+          capability: tosca.capabilities.Node
+          node: tosca.nodes.BlockStorage
           relationship: alien.relationships.LinuxPartition
           occurrences: [ 1, 1]
     interfaces:
