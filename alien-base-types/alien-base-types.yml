@@ -1,73 +1,22 @@
-tosca_definitions_version: alien_dsl_1_2_0
+tosca_definitions_version: alien_dsl_1_4_0
 
-template_name: alien-base-types
-template_author: alien4cloud
-template_version: 1.2.0-SNAPSHOT
+metadata:
+  template_name: alien-base-types
+  template_version: 1.4.1-SNAPSHOT
+  template_author: alien4cloud
 
 #dependencies
 imports:
-  - tosca-normative-types:1.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN14
 
-description: >
-  Some types by alien4cloud.
-
-node_types:
-
-  alien.nodes.LoadBalancer:
-    abstract: true
-    derived_from: tosca.nodes.SoftwareComponent
-    description: >
-      The base type for a load balancer.
-    tags:
-      icon: /images/loadbalancer.png
-    properties:
-      port:
-        type: integer
-        description: Port for the LoadBalancer
-        default: 80
-        constraints:
-          - greater_or_equal: 1
-    capabilities:
-      load_balancer:
-        type: alien.capabilities.LoadBalancer
-
-  alien.nodes.LoadBalancedWebApplication:
-    abstract: true
-    derived_from: tosca.nodes.Root
-    description: >
-      An web application that can be load balanced
-    tags:
-      icon: /images/network.png
-    attributes:
-      local_application_url:
-        type: string
-        description: URL of the web application using private IP, used to register to the load balancer
-    requirements:
-      - load_balancer: alien.capabilities.LoadBalancer
-        occurrences: [ 0, unbounded ]
+description: Types supported by alien 4 cloud that extends the TOSCA specification.
 
 artifact_types:
-  tosca.artifacts.GroovyScript:
-    description: A groovy script (.groovy file)
-    file_ext: [ groovy ]
-  alien.artifacts.WarFile:
-    description: A war file (Web Archive).
-    file_ext: [ war ]
-  alien.artifacts.BatchScript:
+  org.alien4cloud.artifacts.BatchScript:
+    derived_from: tosca.artifacts.Root
     description: A Windows batch script (.bat or .cmd)
     file_ext: [ bat, cmd]
-
-capability_types:
-
-  alien.capabilities.HttpEndpoint:
-    derived_from: tosca.capabilities.Endpoint
-
-  alien.capabilities.LoadBalancer:
-    derived_from: tosca.capabilities.Root
-
-relationship_types:
-  alien.relationships.WebApplicationConnectsToLoadBalancer:
-    abstract: true
-    derived_from: tosca.relationships.ConnectsTo
-    description: Relationship use to connect the WebServer to the LoadBalancer
-    valid_target_types: [ alien.capabilities.LoadBalancer ]
+  org.alien4cloud.artifacts.AnsiblePlaybook:
+    derived_from: tosca.artifacts.Root
+    mime_type: application/zip
+    file_ext: [ ansible ]

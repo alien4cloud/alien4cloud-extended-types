@@ -1,11 +1,12 @@
-tosca_definitions_version: alien_dsl_1_2_0
+tosca_definitions_version: alien_dsl_1_4_0
 
-template_name: alien-extended-storage-types
-template_author: alien4cloud
-template_version: 1.3.1
+metadata:
+  template_name: alien-extended-storage-types
+  template_version: 1.4.1-SNAPSHOT
+  template_author: alien4cloud
 
 imports:
-  - tosca-normative-types:1.0.0-ALIEN12
+  - tosca-normative-types:1.0.0-ALIEN14
 
 description: This archive contains custom blockstorages types.
 
@@ -32,17 +33,20 @@ node_types:
     attributes:
       partition_name: { get_operation_output: [ SELF, Configure, pre_configure_source, PARTITION_NAME ] } # this is a hack to specifies that the attribute is filled from a relationship.
     requirements:
-      - host: tosca.capabilities.Container
-        relationship: tosca.relationships.HostedOn
-        occurrences: [ 1, 1]
-        node_filter: # Ensure that the host node has a os capability with linux operating system.
-          capabilities:
-            - tosca.capabilities.OperatingSystem: # os -> tosca.capabilities.OperatingSystem
-                properties:
-                  - type: { equal: linux }
-      - partition: tosca.nodes.BlockStorage
-        relationship: alien.relationships.LinuxPartition
-        occurrences: [ 1, 1]
+      - host:
+          capability: tosca.capabilities.Container
+          relationship: tosca.relationships.HostedOn
+          occurrences: [ 1, 1]
+          node_filter: # Ensure that the host node has a os capability with linux operating system.
+            capabilities:
+              - tosca.capabilities.OperatingSystem: # os -> tosca.capabilities.OperatingSystem
+                  properties:
+                    - type: { equal: linux }
+      - partition:
+          capability: tosca.capabilities.Node
+          node: tosca.nodes.BlockStorage
+          relationship: alien.relationships.LinuxPartition
+          occurrences: [ 1, 1]
     interfaces:
       Standard:
         start: # Map the mount operation in the start
