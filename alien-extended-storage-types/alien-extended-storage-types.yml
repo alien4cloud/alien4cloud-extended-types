@@ -2,7 +2,7 @@ tosca_definitions_version: alien_dsl_1_4_0
 
 metadata:
   template_name: alien-extended-storage-types
-  template_version: 1.4.1-SNAPSHOT
+  template_version: 1.4.2-SNAPSHOT
   template_author: alien4cloud
 
 imports:
