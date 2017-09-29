@@ -1,13 +1,12 @@
-tosca_definitions_version: alien_dsl_1_4_0
+tosca_definitions_version: alien_dsl_2_0_0
 
 metadata:
   template_name: alien-base-types
-  template_version: 1.4.1-SNAPSHOT
+  template_version: 2.0.0-SNAPSHOT
   template_author: alien4cloud
 
-#dependencies
 imports:
-  - tosca-normative-types:1.0.0-ALIEN14
+  - tosca-normative-types:1.0.0-SNAPSHOT
 
 description: Types supported by alien 4 cloud that extends the TOSCA specification.
 
@@ -20,3 +19,40 @@ artifact_types:
     derived_from: tosca.artifacts.Root
     mime_type: application/zip
     file_ext: [ ansible ]
+
+policy_types:
+  org.alien4cloud.policies.Affinity:
+    derived_from: tosca.policies.Placement
+    description: >
+      This policy instruct the orchestrator to place the targets of the policy in the same container (Same host, zone (data-center), region).
+      Implementations of this policy may refine the actual level of affinity provided and may be specific to actual targets.
+    properties:
+      level:
+        type: string
+        required: false
+        constraints:
+          - valid_values: [ host, zone, region ]
+      labels:
+        type: map
+        description: Map of key-value labels that can be used to provide arbitrary and optional matching information.
+        required: false
+        entry_schema:
+          type: string
+
+  org.alien4cloud.policies.AntiAffinity:
+    derived_from: tosca.policies.Placement
+    description: >
+      This policy instruct the orchestrator to place the targets of the policy in different container (Same host, zone (data-center), region).
+      Implementations of this policy may refine the actual level of anti-affinity provided and may be specific to actual targets.
+    properties:
+      level:
+        type: string
+        required: false
+        constraints:
+          - valid_values: [ host, zone, region ]
+      labels:
+        type: map
+        description: Map of key-value labels that can be used to provide arbitrary and optional matching information.
+        required: false
+        entry_schema:
+          type: string
