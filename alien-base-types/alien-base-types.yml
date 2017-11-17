@@ -6,7 +6,7 @@ metadata:
   template_author: alien4cloud
 
 imports:
-  - tosca-normative-types:1.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN20SM3
 
 description: Types supported by alien 4 cloud that extends the TOSCA specification.
 
@@ -19,6 +19,34 @@ artifact_types:
     derived_from: tosca.artifacts.Root
     mime_type: application/zip
     file_ext: [ ansible ]
+
+capability_types:
+  org.alien4cloud.capabilities.ClusterController:
+    derived_from: tosca.capabilities.Root
+    description: |
+      This capability is used to define the ability for a node to manage a cluster of nodes.
+      The management of other nodes is considered as a black box from the TOSCA orchestrator point of view. This capability should be associated with the definition on the node of the org.alien4cloud.management.ClusterControl interface to offer scale.
+    properties:
+      min_instances:
+        type: integer
+        description: >
+          This property is used to indicate the minimum number of instances that should be created for the associated TOSCA Node Template by a
+          TOSCA orchestrator.
+        default: 1
+      max_instances:
+        type: integer
+        description: >
+          This property is used to indicate the maximum number of instances that should be created for the associated TOSCA Node Template by a
+          TOSCA orchestrator.
+        default: 1
+      default_instances:
+        type: integer
+        required: false
+        description: >
+          An optional property that indicates the requested default number of instances that should be the starting number of instances a TOSCA orchestrator
+          should attempt to allocate.
+          Note: The value for this property MUST be in the range between the values set for ‘min_instances’ and ‘max_instances’ properties.
+        default: 1
 
 policy_types:
   org.alien4cloud.policies.Affinity:
