@@ -49,6 +49,19 @@ capability_types:
         default: 1
 
 policy_types:
+  org.alien4cloud.policies.LabelPlacement:
+    abstract: true
+    derived_from: tosca.policies.Placement
+    description: >
+      This policy instruct the orchestrator to place the targets of the policy in host nodes which label/value pairs matches the one provided in this policy "labels" property.
+    properties:
+      # label should be idealy a list of complex object: {key: , operator: , values: }, or at least a map of list of string. Then we shoudl assume the operator is In
+      labels:
+        type: map
+        description: Map of key-value labels that can be used to provide arbitrary matching information.
+        required: false
+        entry_schema:
+          type: string
   org.alien4cloud.policies.Affinity:
     abstract: true
     derived_from: tosca.policies.Placement
@@ -61,12 +74,6 @@ policy_types:
         required: false
         constraints:
           - valid_values: [ host, zone, region ]
-      labels:
-        type: map
-        description: Map of key-value labels that can be used to provide arbitrary and optional matching information.
-        required: false
-        entry_schema:
-          type: string
 
   org.alien4cloud.policies.AntiAffinity:
     abstract: true
@@ -80,9 +87,3 @@ policy_types:
         required: false
         constraints:
           - valid_values: [ host, zone, region ]
-      labels:
-        type: map
-        description: Map of key-value labels that can be used to provide arbitrary and optional matching information.
-        required: false
-        entry_schema:
-          type: string
