@@ -24,3 +24,7 @@ artifact_types:
     derived_from: tosca.artifacts.Root
     mime_type: application/zip
     file_ext: [ ansible ]
+  org.alien4cloud.artifacts.PuppetRecipe:
+    derived_from: tosca.artifacts.Root
+    mime_type: application/zip
+    file_ext: [ puppet ]
