@@ -4,6 +4,7 @@ partition_number=1
 device_name=${DEVICE}
 
 echo "Checking existing partition for $device_name"
+export LC_ALL=C
 sudo parted --script $device_name print 2>/dev/null | grep "Partition Table: unknown"
 PARTITION_UNKNOWN=$(echo $?)
 if [ $PARTITION_UNKNOWN -eq 0 ] ; then
