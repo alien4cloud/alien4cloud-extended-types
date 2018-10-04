@@ -91,6 +91,10 @@ policy_types:
     derived_from: tosca.policies.Root
     description: >
       This policy instruct the orchestrator to schedule the given workflow using the given cron expression.
+    metadata:
+      icon: /images/policy_scheduling.png
+      a4c_class: fa fa-clock-o
+      a4c_svg_char: f017
     properties:
       cron_expression:
         type: string
