@@ -112,5 +112,9 @@ node_types:
       A job is a component that has a run operation.
     interfaces:
       tosca.interfaces.node.lifecycle.Runnable:
+        submit:
+          description: Submit a job to a engine.
         run:
-          description: Standard lifecycle run operation.
+          description: Run a job.
+        cancel:
+          description: Cancel a submitted job.
