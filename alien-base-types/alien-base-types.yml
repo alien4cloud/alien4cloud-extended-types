@@ -74,7 +74,6 @@ policy_types:
         required: false
         constraints:
           - valid_values: [ host, zone, region ]
-
   org.alien4cloud.policies.AntiAffinity:
     abstract: true
     derived_from: tosca.policies.Placement
@@ -87,9 +86,25 @@ policy_types:
         required: false
         constraints:
           - valid_values: [ host, zone, region ]
+  org.alien4cloud.policies.ScheduleWorkflowPolicy:
+    abstract: true
+    derived_from: tosca.policies.Root
+    description: >
+      This policy instruct the orchestrator to schedule the given workflow using the given cron expression.
+    metadata:
+      icon: /images/policy_scheduling.png
+      a4c_class: fa fa-clock-o
+      a4c_svg_char: f017
+    properties:
+      cron_expression:
+        type: string
+        required: true
+      workflow_name:
+        type: string
+        required: true
+        default: run
 
 node_types:
-
   org.alien4cloud.nodes.Job:
     abstract: true
     derived_from: tosca.nodes.Root
@@ -97,5 +112,9 @@ node_types:
       A job is a component that has a run operation.
     interfaces:
       tosca.interfaces.node.lifecycle.Runnable:
+        submit:
+          description: Submit a job to a engine.
         run:
-          description: Standard lifecycle run operation.
+          description: Run a job.
+        cancel:
+          description: Cancel a submitted job.
