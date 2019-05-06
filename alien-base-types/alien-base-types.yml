@@ -12,11 +12,11 @@ description: Types supported by alien 4 cloud that extends the TOSCA specificati
 
 artifact_types:
   org.alien4cloud.artifacts.BatchScript:
-    derived_from: tosca.artifacts.Root
+    derived_from: tosca.artifacts.Implementation
     description: A Windows batch script (.bat or .cmd)
     file_ext: [ bat, cmd]
   org.alien4cloud.artifacts.AnsiblePlaybook:
-    derived_from: tosca.artifacts.Root
+    derived_from: tosca.artifacts.Implementation
     mime_type: application/zip
     file_ext: [ ansible ]
 
