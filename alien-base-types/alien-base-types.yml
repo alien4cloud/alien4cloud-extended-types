@@ -48,6 +48,16 @@ capability_types:
           Note: The value for this property MUST be in the range between the values set for ‘min_instances’ and ‘max_instances’ properties.
         default: 1
 
+  org.alien4cloud.capabilities.Proxy:
+    derived_from: tosca.capabilities.Endpoint
+    description: >
+      The capability to proxy a requirement. When a capability proxy a requirement, it inherits the capability specification of the capability that is target of a relationship wired from the proxyfied requirement.
+    properties:
+      proxy_for:
+        type: string
+        description: >
+          The name of the requirement this capability will proxy.
+
 policy_types:
   org.alien4cloud.policies.LabelPlacement:
     abstract: true
