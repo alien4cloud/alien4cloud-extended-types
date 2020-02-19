@@ -34,6 +34,9 @@ data_types:
       port:
         type: string
         required: false
+      url_path:
+        type: string
+        required: false
 
 capability_types:
   org.alien4cloud.capabilities.ClusterController:
