@@ -20,6 +20,21 @@ artifact_types:
     mime_type: application/zip
     file_ext: [ ansible ]
 
+data_types:
+
+  org.alien4cloud.data.EndpointVarMapping:
+    derived_from: tosca.datatypes.Root
+    properties:
+      ip_address:
+        type: string
+        required: false
+      protocol:
+        type: string
+        required: false
+      port:
+        type: string
+        required: false
+
 capability_types:
   org.alien4cloud.capabilities.ClusterController:
     derived_from: tosca.capabilities.Root
@@ -57,6 +72,11 @@ capability_types:
         type: string
         description: >
           The name of the requirement this capability will proxy.
+
+  org.alien4cloud.capabilities.StaticEndpoint:
+    derived_from: tosca.capabilities.Endpoint
+    description: >
+      A static endpoint doesn't change at runtime, it can be used for example for services definition.
 
 policy_types:
   org.alien4cloud.policies.LabelPlacement:
@@ -128,3 +148,18 @@ node_types:
           description: Run a job.
         cancel:
           description: Cancel a submitted job.
+
+relationship_types:
+  org.alien4cloud.relationships.ConnectsToStaticEndpoint:
+    derived_from: tosca.relationships.ConnectsTo
+    description: >
+      A connection a to static endpoint is a connection that is not affected by runtime. It can be handled before
+      deployment by a modifier for example. Mapping between some vars of the source component and some properties / attributes of the
+      target component/endpoint is encoded in the relationship itself (property 'var_mapping') and are used before deployment to feed
+      a 'var_value' map onto the source component.
+    valid_target_types: [ org.alien4cloud.capabilities.StaticEndpoint ]
+    properties:
+      var_mapping:
+        type: org.alien4cloud.data.EndpointVarMapping
+        required: false
+        description: Here is the mapping beetween target properties and variables of your config file.
