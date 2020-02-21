@@ -19,6 +19,16 @@ artifact_types:
     derived_from: tosca.artifacts.Root
     mime_type: application/zip
     file_ext: [ ansible ]
+  org.alien4cloud.artifacts.GangjaConfig:
+    derived_from: tosca.artifacts.Root
+    description: |
+      A file that allow Jinja2 syntax, where variables can easily be resolved by StaticEndpoint
+      properties / attributes when connected via a ConnectsToStaticEndpoint relationship.
+      In near futur, we plan to have a GangjaConfig editor in the wizzard abling us to give a smart way
+      to graphically connect components (to build 'gangs' of components working together !).
+      Gangja is a concatenation of gang (of 4) and Jinja (actually these artifacts are not pure Jinja2).
+    mime_type: text/plain
+    file_ext: [ ja ]
 
 data_types:
 
