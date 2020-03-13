@@ -1,0 +1,233 @@
+tosca_definitions_version: alien_dsl_2_0_0
+
+metadata:
+  template_name: docker-types
+  template_author: alien4cloud
+  template_version: 3.0.0-SNAPSHOT
+
+imports:
+  - tosca-normative-types:1.0.0-ALIEN20
+
+description: >
+  Contains the non-normative definition of Docker-related types as
+  currently supported in Alien 4 Cloud.
+
+artifact_types:
+  tosca.artifacts.Deployment.Image.Container.Docker:
+    description: Docker Container Image
+    derived_from: tosca.artifacts.Deployment.Image
+
+data_types:
+  org.alien4cloud.extended.container.datatypes.ConfigSetting:
+    derived_from: tosca.datatypes.Root
+    description: Setting for a set of prefixed inputs related to a given folder in the topology and for which a configMap will be mounted on the container (K8S).
+    properties:
+      mount_path:
+        type: string
+        description: where the config map will be mount onto the container.
+        required: true
+      mount_subPath:
+        type: string
+        description: where the config map will be mount onto the container.
+        required: false
+      input_prefix:
+        type: string
+        description: the prefix used for the input names.
+        required: true
+      config_path:
+        type: string
+        description: where to to find the files that will be used to create the configMap.
+        required: true
+
+node_types:
+
+  org.alien4cloud.extended.container.types.ContainerRuntime:
+    abstract: true
+    derived_from: tosca.nodes.Root
+    description: >
+      Can host containerized applications. A ContainerRuntime represents the container itself, while
+      DockerContainer is the contanerized application.
+    capabilities:
+      host: org.alien4cloud.extended.container.capabilities.ApplicationHost
+      # scalable on this or on DockerContainer ?
+      # scalable: tosca.capabilities.Scalable
+    requirements:
+      - host:
+          # a ContainerRuntime can be hosted on a ContainerDeploymentUnit
+          capability: tosca.capabilities.Container.Docker
+          relationship: tosca.relationships.HostedOn
+          occurrences: [0, 1]
+
+  org.alien4cloud.extended.container.types.ContainerDeploymentUnit:
+    abstract: true
+    derived_from: tosca.nodes.Root
+    description: >
+      Can host containers and be deployed as a unit. Think about Pods in K8S.
+    capabilities:
+      host: tosca.capabilities.Container.Docker
+      scalable: tosca.capabilities.Scalable
+
+  org.alien4cloud.extended.container.types.ContainerJobUnit:
+    abstract: true
+    derived_from: tosca.nodes.Root
+    description: >
+      Can host containers to be run as Jobs.
+    capabilities:
+      host: tosca.capabilities.Container.Docker
+
+  # rename as ContainerApplication ?
+  tosca.nodes.Container.Application.DockerContainer:
+    abstract: true
+    derived_from: tosca.nodes.Container.Application
+    description: >
+      The TOSCA Container Application Docker node represents an application running in a Docker container.
+      Properties defined in the node will be interpreted as the entrypoint's arguments.
+    tags:
+      icon: /images/docker.png
+    properties:
+      cpu_share:
+        type: float
+        required: true
+        default: 1.0
+      cpu_share_limit:
+        type: float
+        required: false
+      mem_share:
+        type: scalar-unit.size
+        required: true
+        default: 128 MB
+        constraints:
+          - greater_or_equal: 0 MB
+      mem_share_limit:
+        type: scalar-unit.size
+        required: false
+        constraints:
+          - greater_or_equal: 0 MB
+      disk_share:
+        type: integer
+        required: false
+      docker_options:
+        type: map
+        required: false
+        entry_schema:
+          description: Arbitrary command-line options for the docker run command.
+          type: string
+      docker_run_args:
+        type: list
+        required: false
+        entry_schema:
+          description: Docker run arguments. Allows safe usage of Docker ENTRYPOINT statement in the Dockerfile.
+          type: string
+      docker_bash_cmd:
+        type: list
+        entry_schema:
+          type: string
+        required: false
+        default:
+          - "/bin/bash"
+          - "-c"
+        description: Docker run command. Will override the Dockerfile CMD statement.
+      docker_run_cmd:
+        type: string
+        required: false
+        description: Docker run command. Will override the Dockerfile CMD statement.
+      docker_env_vars:
+        type: map
+        required: false
+        entry_schema:
+          description: Environment variables for the Docker container.
+          type: string
+    attributes:
+      endpoint:
+        type: string
+        description: >
+          Reflects the external endpoint assigned to this container.
+    capabilities:
+      attach: org.alien4cloud.capabilities.DockerVolumeAttachment
+      scalable: tosca.capabilities.Scalable
+    requirements:
+      - host:
+          capability: org.alien4cloud.extended.container.capabilities.ApplicationHost
+          relationship: org.alien4cloud.extended.container.relationships.HostedOnContainerRuntime
+          # will be [1, 1] since it's not an option
+          occurrences: [1, 1]
+
+  tosca.nodes.Container.Application.ConfigurableDockerContainer:
+    abstract: true
+    derived_from: tosca.nodes.Container.Application.DockerContainer
+    description: >
+      A specification of a DockerContainer that is configurable. In K8S, we'll use configMaps.
+    properties:
+      config_settings:
+        type: list
+        required: false
+        entry_schema:
+          type: org.alien4cloud.extended.container.datatypes.ConfigSetting
+
+  org.alien4cloud.nodes.DockerExtVolume:
+    abstract: true
+    derived_from: tosca.nodes.BlockStorage
+    tags:
+      icon: /images/volume.png
+    requirements:
+      - attachment:
+          capability: org.alien4cloud.capabilities.DockerVolumeAttachment
+          relationship: org.alien4cloud.relationships.MountDockerVolume
+          occurrences: [1, unbounded]
+      - host:
+          capability: tosca.capabilities.Container.Docker
+          relationship: tosca.relationships.HostedOn
+          occurrences: [0, 1]
+
+  org.alien4cloud.nodes.DockerArtifactVolume:
+    derived_from: org.alien4cloud.nodes.DockerExtVolume
+    abstract: true
+    description: |
+      This volume has an artifact, can be used to create a K8S secret from a file or files in a directory for example.
+    tags:
+      icon: /images/volume.png
+    artifacts:
+      - resources:
+          type: tosca.artifacts.File
+          file: README.md
+
+capability_types:
+
+  tosca.capabilities.Container.Docker:
+    derived_from: tosca.capabilities.Container
+    description: >
+      The capacity to host and run Docker containers.
+
+  org.alien4cloud.extended.container.capabilities.ApplicationHost:
+    derived_from: tosca.capabilities.Container
+    description: >
+      The capacity to host and run containerized application image.
+
+  org.alien4cloud.capabilities.DockerVolumeAttachment:
+    derived_from: tosca.capabilities.Attachment
+    description: >
+      Capability to mount a Docker volume
+    valid_source_types: [ org.alien4cloud.nodes.DockerExtVolume ]
+
+relationship_types:
+
+  org.alien4cloud.extended.container.relationships.HostedOnContainerRuntime:
+    derived_from: tosca.relationships.HostedOn
+    valid_target_types: [ org.alien4cloud.extended.container.capabilities.ApplicationHost ]
+
+  org.alien4cloud.relationships.MountDockerVolume:
+    derived_from: tosca.relationships.AttachTo
+    valid_target_types: [ org.alien4cloud.capabilities.DockerVolumeAttachment ]
+    properties:
+      container_path:
+        type: string
+        required: true
+        description: Specifies where the volume is mounted inside the container.
+      container_subPath:
+        type: string
+        required: false
+        description: Path within the volume from which the container's volume should be mounted.
+      readonly:
+        type: boolean
+        required: false
+        default: false

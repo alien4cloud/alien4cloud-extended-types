@@ -1,0 +1,76 @@
+tosca_definitions_version: alien_dsl_2_0_0
+
+metadata:
+  template_name: alien-premium-storage-types
+  template_author: alien4cloud
+  template_version: 3.0.0-SNAPSHOT
+
+imports:
+  - tosca-normative-types:1.0.0-ALIEN20
+  - alien-base-types:3.0.0-SNAPSHOT
+  - alien-extended-storage-types:3.0.0-SNAPSHOT
+
+description: This archive contains premium custom blockstorages types.
+
+node_types:
+  alien.nodes.WindowsFileSystem:
+    derived_from: tosca.nodes.SoftwareComponent
+    description: FileSystem node can be used to mount and format a volume.
+    properties:
+      fs_type:
+        description: The formatage type of the file System.
+        type: string
+        default: 'NTFS'
+        constraints:
+          - valid_values: [ "NTFS", "FAT32"]
+      volume_letter:
+        type: string
+        required: true
+        constraints:
+          - min_length: 1
+      volume_id:
+        type: string
+        default: ''
+        required: false
+        description: must be not empty if you want use an existing volume, an empty value mean a new blockstorage
+    artifacts:
+      - init_ps1:
+          file: scripts/init.ps1
+          type: tosca.artifacts.File
+      - format_ps1:
+          file: scripts/format.ps1
+          type: tosca.artifacts.File
+      - unmount_ps1:
+          file: scripts/unmount.ps1
+          type: tosca.artifacts.File
+    requirements:
+      - host:
+          capability: tosca.capabilities.Container
+          relationship: tosca.relationships.HostedOn
+          occurrences: [ 1, 1]
+          node_filter:
+            capabilities:
+              - tosca.capabilities.OperatingSystem:
+                  properties:
+                    - type: { equal: windows }
+      - partition:
+          capability: tosca.capabilities.Attachment
+          relationship: alien.relationships.WindowsPartition
+          occurrences: [ 1, 1]
+
+relationship_types:
+  alien.relationships.WindowsPartition:
+    derived_from: tosca.relationships.DependsOn
+    description: Connect a FileSystem to a block storage.
+    interfaces:
+      Configure:
+        pre_configure_source:
+          inputs:
+            FS_MOUNT_PATH: { get_attribute: [TARGET, device] }
+            DEVICE_LETTER: { get_property: [SOURCE, volume_letter] }
+          implementation: scripts/init.bat
+        post_configure_source:
+          inputs:
+            FS_TYPE: { get_property: [SOURCE, fs_type] }
+            DEVICE_LETTER: { get_property: [SOURCE, volume_letter] }
+          implementation: scripts/format.bat

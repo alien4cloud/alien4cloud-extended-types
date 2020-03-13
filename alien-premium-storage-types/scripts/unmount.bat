@@ -1,0 +1,1 @@
+ C:\Windows\Sysnative\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -File  %unmount_ps1% -FS_MOUNT_PATH "%FS_MOUNT_PATH%"
